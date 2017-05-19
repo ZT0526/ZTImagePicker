@@ -262,4 +262,18 @@
     return _cameraSwitchButton;
     
 }
+
+- (UIImageView *)focusView{
+    if(_focusView == nil){
+        _focusView = [[UIImageView alloc] init];
+        _focusView.frame = CGRectMake(0, 0, 80, 80);
+        _focusView.layer.borderColor = RGB(252, 208, 52, 1.0).CGColor;
+        _focusView.layer.borderWidth = 2.0f;
+        _focusView.hidden = YES;
+        _focusView.alpha = 0.0;
+        [self addSubview:_focusView];
+    }
+    
+    return _focusView;
+}
 @end

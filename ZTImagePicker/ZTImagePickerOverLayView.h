@@ -22,6 +22,8 @@ blue:b/255.0 alpha:a]
 @property (nonatomic, strong) UIImageView *imageLibraryView;
 @property (nonatomic, strong) UIView   *buttomBar;
 
+@property (nonatomic, strong) UIImageView   *focusView;
+
 @property (nonatomic, strong) UIButton *flashButton;
 @property (nonatomic, strong) UIButton *flashAutoButton;
 @property (nonatomic, strong) UIButton *flashOpeanButton;

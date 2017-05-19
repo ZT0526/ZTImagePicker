@@ -29,6 +29,7 @@
 
 @property (nonatomic, strong) AVCaptureStillImageOutput* stillImageOutput;
 
+@property (nonatomic, strong) AVCaptureDevice             *device;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer* previewLayer;
 
 @property (nonatomic, strong) NSData                      *imageData;
@@ -117,7 +118,7 @@
     
     NSError *error;
     
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
     //    //更改这个设置的时候必须先锁定设备，修改完后再解锁，否则崩溃
     //    [device lockForConfiguration:nil];
@@ -129,7 +130,7 @@
     //
     //    [device unlockForConfiguration];
     
-    self.videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&error];
+    self.videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.device error:&error];
     if (error) {
         NSLog(@"%@",error);
     }
@@ -162,8 +163,8 @@
     self.preview.buttomBar.frame = CGRectMake(0, self.view.height - 70 * ScreenWidth/320.0 , self.view.width, 70* ScreenWidth/320.0);
     [self.preview layoutSubviews];
     
-    if(device.isFlashAvailable)
-        [self.preview setFlashModel:device.flashMode];
+    if(self.device.isFlashAvailable)
+        [self.preview setFlashModel:self.device.flashMode];
     else{
         self.preview.flashButton.hidden = YES;
         self.preview.cameraSwitchButton.hidden = YES;
@@ -178,9 +179,15 @@
 
 - (void)p_configGesture{
     
-    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(handlePinchGesture:)];
     pinch.delegate = self;
     [self.preview addGestureRecognizer:pinch];
+    
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(focusAction:)];
+    [self.preview addGestureRecognizer:tap];
 }
 
 - (void)p_configActions{
@@ -200,6 +207,48 @@
 }
 
 #pragma mark Actions
+
+- (void)focusAction:(UITapGestureRecognizer *)sender{
+    CGPoint location = [sender locationInView:self.preview];
+    CGPoint pointInsect = CGPointMake(location.x / self.view.width, location.y / self.view.height);
+    
+    [self.preview.focusView setCenter:location];
+    self.preview.focusView.hidden = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        self.preview.focusView.alpha = 1.0;
+    } completion:^(BOOL finished) {
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            self.preview.focusView.alpha = 0.0;
+        }completion:^(BOOL finished) {
+            self.preview.focusView.hidden = YES;
+        }];
+    }];
+    
+    if ([self.device isFocusPointOfInterestSupported] && [self.device isFocusModeSupported:AVCaptureFocusModeAutoFocus])
+    {
+        NSError *error;
+        if ([self.device lockForConfiguration:&error])
+        {
+            if ([self.device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus])
+            {
+                [self.device setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+                [self.device setFocusPointOfInterest:pointInsect];
+            }
+            
+            if([self.device isExposurePointOfInterestSupported] && [self.device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure])
+            {
+                [self.device setExposurePointOfInterest:pointInsect];
+                [self.device setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
+                
+            }
+            
+            [self.device unlockForConfiguration];
+        }
+    }
+
+}
+
 //切换镜头
 - (void)switchCameraSegmentedControlClick:(id)sender {
     
