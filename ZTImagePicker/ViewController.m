@@ -9,11 +9,12 @@
 #import "ViewController.h"
 #import "ZTImagePickerController.h"
 #import "ZTImagePickerOverLayView.h"
+#import "XBWaterMarkCameraHandler.h"
+#import "UIImage+FWAddition.h"
 
 @interface ViewController ()<UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) ZTImagePickerController *imagePicker;
-
 
 @end
 
@@ -33,10 +34,17 @@
 
 - (IBAction)buttonAction:(id)sender {
     
-    self.imagePicker = [[ZTImagePickerController alloc] init];
+//    self.imagePicker = [[ZTImagePickerController alloc] init];
+//    
+//    
+//    [self presentViewController:self.imagePicker animated:YES completion:nil];
     
     
-    [self presentViewController:self.imagePicker animated:YES completion:nil];
+    [[XBWaterMarkCameraHandler sharedHandler] showCameraPickerInController:self finishBlock:^(UIImage *originImage, ZTLocationModel *placemark, NSUInteger index,XBWaterMark markType, NSString *xmType) {
+        //            [[originImage markedImageWithDate:[NSDate fixedDate] user:[FWUser currentUser].username type:@"" placemark:placemark withPhone:[FWUser currentUser].cellphone] saveImageToAlarmPhotoAlbum];
+        [[originImage markedImageWithType:markType date:[NSDate date] user:@"hhh" placLocation:placemark withPhone:nil xmType:xmType] saveImageToAlarmPhotoAlbum];
+    }];
+
 }
 
 #pragma mark UIImagePickerControllerDelegate

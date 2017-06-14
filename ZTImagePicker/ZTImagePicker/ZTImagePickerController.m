@@ -110,30 +110,15 @@
 - (void)p_initAVCaptureSession{
     
     self.session = [[AVCaptureSession alloc] init];
-    //    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    //        [self.session setSessionPreset:AVCaptureSessionPreset640x480];
-    //    else
     [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
-    
     
     NSError *error;
     
     self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-    //    //更改这个设置的时候必须先锁定设备，修改完后再解锁，否则崩溃
-    //    [device lockForConfiguration:nil];
-    //
-    //
-    //    //设置闪光灯为自动
-    //    if([device isFlashModeSupported:AVCaptureFlashModeAuto])
-    //        [device setFlashMode:AVCaptureFlashModeAuto];
-    //
-    //    [device unlockForConfiguration];
     
     self.videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.device error:&error];
-    if (error) {
-        NSLog(@"%@",error);
-    }
+   
     self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
     //输出设置。AVVideoCodecJPEG   输出jpeg格式图片
     NSDictionary * outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys:AVVideoCodecJPEG,AVVideoCodecKey, nil];
@@ -157,12 +142,13 @@
     [self.preview.layer addSublayer:self.previewLayer];
     [self.view addSubview:self.preview];
     
+    //添加顶部以及底部的自定义工具条
     [self.view addSubview:self.preview.topbar];
     [self.view addSubview:self.preview.buttomBar];
     self.preview.topbar.frame = CGRectMake(0, 0, self.view.width, 64 * ScreenWidth/320.0);
     self.preview.buttomBar.frame = CGRectMake(0, self.view.height - 70 * ScreenWidth/320.0 , self.view.width, 70* ScreenWidth/320.0);
     [self.preview layoutSubviews];
-    
+    //设置闪关灯模式
     if(self.device.isFlashAvailable)
         [self.preview setFlashModel:self.device.flashMode];
     else{
@@ -170,6 +156,7 @@
         self.preview.cameraSwitchButton.hidden = YES;
     }
     
+    //设置拍照后预览图层
     self.preImageView = [[ZTImagePickerPreImageView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     [self.preImageView layoutSubviews];
     self.preImageView.hidden = YES;
@@ -203,7 +190,6 @@
     
     [self.preImageView.reTakeButton addTarget:self action:@selector(retakeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.preImageView.useImageButton addTarget:self action:@selector(useImageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
 }
 
 #pragma mark Actions
@@ -345,10 +331,11 @@
                     //无权限
                     return ;
                 }
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            [library writeImageDataToSavedPhotosAlbum:jpegData metadata:(__bridge id)attachments completionBlock:^(NSURL *assetURL, NSError *error) {
-        
-            }];
+        //保存到相册
+//            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+//            [library writeImageDataToSavedPhotosAlbum:jpegData metadata:(__bridge id)attachments completionBlock:^(NSURL *assetURL, NSError *error) {
+//        
+//            }];
         
     }];
     

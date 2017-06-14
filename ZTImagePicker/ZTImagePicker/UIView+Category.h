@@ -1,4 +1,10 @@
-
+//
+//  UIView+Category.h
+//  TestPro
+//
+//  Created by mac iko on 14-3-5.
+//  Copyright (c) 2014年 mac iko. All rights reserved.
+//
 
 #import <UIKit/UIKit.h>
 
