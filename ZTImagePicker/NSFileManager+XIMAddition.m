@@ -1,9 +1,8 @@
 //
 //  NSFileManager+XIMAdditions.m
-//  XBIMKit
 //
-//  Created by Zhang Studyro on 13-7-23.
-//  Copyright (c) 2013年 Xbcx. All rights reserved.
+//  Created by ZT0526 on 2017/4/21.
+//  Copyright © 2017年 小步创想. All rights reserved.
 //
 
 #import "NSFileManager+XIMAddition.h"

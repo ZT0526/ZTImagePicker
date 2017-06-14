@@ -1,9 +1,8 @@
 //
 //  UIImage+XIMAddition.h
-//  XBIMKit
 //
-//  Created by Peter Zhang on 13-10-28.
-//  Copyright (c) 2013年 小步创想. All rights reserved.
+//  Created by ZT0526 on 2017/4/21.
+//  Copyright © 2017年 小步创想. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

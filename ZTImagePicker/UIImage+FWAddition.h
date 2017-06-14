@@ -2,8 +2,8 @@
 //  UIImage+FWAddition.h
 //  Fieldworks
 //
-//  Created by Peter Zhang on 14-4-17.
-//  Copyright (c) 2014年 小步创想. All rights reserved.
+//  Created by ZT0526 on 2017/4/21.
+//  Copyright © 2017年 小步创想. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

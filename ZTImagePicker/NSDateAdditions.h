@@ -1,9 +1,8 @@
 //
 //  NSDateAdditions.h
-//  TapKit
 //
-//  Created by Wu Kevin on 4/27/13.
-//  Copyright (c) 2013 Telligenty. All rights reserved.
+//  Created by ZT0526 on 2017/4/21.
+//  Copyright © 2017年 小步创想. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
